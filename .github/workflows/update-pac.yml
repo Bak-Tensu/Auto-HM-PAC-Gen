@@ -2,11 +2,16 @@ name: Update PAC File
 
 on:
   schedule:
-    - cron: "0 */1 * * *"
+    - cron: "19 * * * *"
+    - cron: "43 * * * *"
   workflow_dispatch:
 
 permissions:
   contents: write  # Needed to allow a git push from the Action
+
+concurrency:
+  group: pac-update
+  cancel-in-progress: true  # True to cancel ongoing runs instead of queuing them
 
 jobs:
   update:
