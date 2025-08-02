@@ -1,3 +1,4 @@
+# .github/workflows/update-pac.yml
 name: Update PAC File
 
 on:
@@ -7,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write  # Needed to allow a git push from the Action
+  contents: write  # Required to push (whether on this branch or on other branches)
 
 concurrency:
   group: pac-update
@@ -17,9 +18,10 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout main branch
         uses: actions/checkout@v3
         with:
+          ref: main
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
@@ -30,13 +32,23 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Generate PAC file
+      - name: Run generate_pac.py to generate PAC file
         run: python generate_pac.py
 
-      - name: Commit and push changes
+      - name: Prepare pac-branch contents
         run: |
+          mkdir temp
+          cp proxy.pac temp/
+          cp .htaccess temp/
+      
+      - name: Push to pac-branch (force, squash history)
+        run: |
+          cd temp
+          git init
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
-          git add proxy.pac .htaccess
-          git diff --cached --quiet || git commit -m "Update PAC file"
-          git push
+          git add .
+          git commit -m "Update PAC and .htaccess"
+          git branch -M pac-branch
+          git remote add origin https://github.com/${{ github.repository }}.git
+          git push --force origin pac-branch
