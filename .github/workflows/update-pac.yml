@@ -58,5 +58,6 @@ jobs:
           git add .
           git commit -m "Update PAC and .htaccess"
           git branch -M pac-branch
-          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          # Commented because the first occurrence is sufficient
+          # git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git push --force origin pac-branch
