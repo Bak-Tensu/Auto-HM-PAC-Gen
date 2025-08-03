@@ -47,6 +47,14 @@ jobs:
           git init
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
+
+          # Add current pac-branch as remote and fetch it. This part added to preserve Readme.
+          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git fetch origin pac-branch || true  # Continue even if branch doesn't exist
+
+          # Try to restore README.md if it exists
+          git checkout origin/pac-branch -- README.md || true
+          
           git add .
           git commit -m "Update PAC and .htaccess"
           git branch -M pac-branch
