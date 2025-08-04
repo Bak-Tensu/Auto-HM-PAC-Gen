@@ -4,7 +4,7 @@ name: Update PAC File
 on:
   schedule:
     - cron: "19 * * * *"
-    - cron: "43 * * * *"
+    # - cron: "43 * * * *" # Keep only one hourly job
   workflow_dispatch:
 
 permissions:
