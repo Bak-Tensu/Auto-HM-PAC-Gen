@@ -3,7 +3,9 @@ name: Update PAC File
 
 on:
   schedule:
-    - cron: "19 * * * *"
+    - cron: "23 10 * * 2" # Keep one weekly job only, to confirm it still works.
+    # Suspended hourly jobs
+    # - cron: "19 * * * *"
     # - cron: "43 * * * *" # Keep only one hourly job
   workflow_dispatch:
 
