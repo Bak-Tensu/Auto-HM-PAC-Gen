@@ -1,0 +1,3 @@
+<Files "proxy.pac">
+  Header set Cache-Control "no-cache, no-store, must-revalidate"
+</Files>
